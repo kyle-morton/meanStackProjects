@@ -5,8 +5,10 @@ angular.module('firstApp', []) //no dependecies (empty array)
 	.controller('mainController', function() { 
 		var vm = this; //use this instead of scope
 		
+		vm.computerData = {};
+		
 		//define vars and functions onto THIS (use controller as data-store)
-		vm.message = "Hey, What's Up?";
+		vm.message = "Message Text";
 		
 		//list of objects for display
 		vm.computers = [
@@ -14,6 +16,25 @@ angular.module('firstApp', []) //no dependecies (empty array)
 			{name: 'Yoga 2 Pro', color: 'Gray', quality: 6},
 			{name: 'Chromebook', color: 'Black', quality: 5}
 		];
+		
+		vm.addComputer = function() {
+			
+			console.log("create computer");
+			
+			var newComputer = {
+				name: vm.computerData.name,
+				color: vm.computerData.color,
+				quality: vm.computerData.quality
+			};
+			
+			console.log(JSON.stringify(newComputer));
+			
+			vm.computers.push(newComputer);
+	
+			
+			vm.computerData = {};
+			
+		}
 		
 	});
 	
