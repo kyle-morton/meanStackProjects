@@ -6,10 +6,13 @@ var express    = require('express');		// call express
 var app        = express(); 				// define our app using express
 var bodyParser = require('body-parser'); 	// get body-parser
 var morgan     = require('morgan'); 		// used to see requests
+var jwt 	   = require('jsonwebtoken');	// used for auth tokens
 var mongoose   = require('mongoose');
 var User       = require('./app/models/user');
 var port       = process.env.PORT || 8080; // set the port for our app
 var User 	   = require('./app/models/user'); //get User schema
+var secret 	   = 'superSecretPasswordsecretThing'; //used in creation of JWT tokens
+
 
 // APP CONFIGURATION ---------------------
 // use body parser so we can grab information from POST requests
@@ -42,19 +45,109 @@ app.get('/', function(req, res) {
 // get an instance of the express router
 var apiRouter = express.Router();
 
-//ALL API requests middleware 
-//REM: Middleware useful for logging,
-//validation, error checking in request body, etc
+// route for authenticating users
+// REM: BEFORE auth middleware! This way unauth users can get here
+apiRouter.post('/authenticate', function(req, res) {
+	
+	//Find User By ID
+	User.findOne({
+		username: req.body.username
+		}).select('name username password').exec(function(err, user){
+			
+			if (err) res.send("ERROR: " + err);
+			
+			var authMessage = "Authentication Failed: ";
+			
+			//No user with that username found
+			if (!user) {
+				res.json({
+					success: false,
+					message: authMessage + "User Not Found"
+				});
+			} else if (user) {  //user found
+				
+				//check if request PW matches using Model static method!
+				var validPW = user.comparePassword(req.body.password); 
+				
+				//if doesn't match
+				if (!validPW) {
+					res.send({
+						success: false,
+						message: authMessage + "Wrong Password"
+					});
+				} else { //valid password entered
+					
+					//Create JWT Token
+					//ARGS -> pass object with name, username
+					// secret, expiration in minutes
+					var token = jwt.sign({
+							name: user.name,
+							username: user.username
+						}, secret, {expiresInMinutes: 1440}); //expire in 24 hours
+					
+					res.json({
+						success: true,
+						message: 'Enjoy your token!',
+						token: token
+					}); //Return token for future requests
+					
+				}
+				
+				
+			}
+			
+		})
+	
+	
+});
+
+//All API Middleware
+//Verify req's JWT token
 apiRouter.use(function(req, res, next) {
 	console.log("New request to API");
 	
-	next(); //allow to proceed with request
+	//retrieve token from body, arg, or header
+	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+	
+	//if passed, verify it
+	if (token) {
+		
+		//use jwt library to decode (need token and secret to decode)
+		jwt.verify(token, secret, function(err, decoded) {
+			
+			if (err) {
+				res.status(403).send({
+					success: false,
+					message: "Failed to authenticate token."
+				});
+			} else { //token valid
+			
+				req.decoded = decoded; //save the token back to request for future use
+				next(); //allow through to route
+				
+			}
+		}); //end verify
+		
+		
+	} else { //no token provided
+		return res.status(403).send({
+			success: false,
+			message: "No token provided."
+		});	
+	}
+	
+	//next(); //allow to proceed with request
 });
 
 // test route to make sure everything is working 
 // accessed at GET http://localhost:8080/api
 apiRouter.get('/', function(req, res) {
 	res.json({ message: 'hooray! welcome to our api!' });	
+});
+
+//api endpoint to get logged-in user information
+apiRouter.get('/me', function(req, res) {
+	res.send(req.decoded); //return the decoded json token
 });
 
 //create route then apply new methods!
@@ -111,7 +204,9 @@ apiRouter.param('user_id',function(req, res, next) {
 	if (typeof req.params.user_id !== "undefined") {
 		next();
 	} else { //otherwise, alert in response
-		res.json({message: "No Id Passed In Request"});
+		res.json({
+			status: false,
+			message: "No Id Passed In Request"});
 	}
 	
 	
@@ -168,7 +263,8 @@ apiRouter.route('/users/:user_id')
 			res.json({message: "User Deleted!"});
 			
 		})
-	})
+	});
+	
 
 
 // REGISTER OUR ROUTES -------------------------------
