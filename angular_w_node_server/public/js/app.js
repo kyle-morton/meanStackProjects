@@ -1,4 +1,4 @@
-angular.module('routerApp', ['routerRoutes'])
+angular.module('routerApp', ['routerRoutes', 'ngAnimate'])
 
 //create controllers 
 
@@ -15,6 +15,7 @@ angular.module('routerApp', ['routerRoutes'])
 	var vm = this;
 	
 	vm.message = "Home Page!";
+	
 })
 
 .controller('aboutController', function() {
