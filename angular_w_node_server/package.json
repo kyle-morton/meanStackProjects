@@ -1,0 +1,7 @@
+{
+  "name": "angular_w_node_server",
+  "main": "server.js",
+  "dependencies": {
+    "express" : "~4.9.1"
+  }
+}
