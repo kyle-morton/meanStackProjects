@@ -1,0 +1,4 @@
+{
+  "name": "sample_node_only",
+  "main": "server.js"
+}
