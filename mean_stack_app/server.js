@@ -1,6 +1,9 @@
 // BASE SETUP
 // ======================================
 
+//GET CONFIG FILE
+var config = require('./config');
+
 // CALL THE PACKAGES --------------------
 var express    = require('express');		// call express
 var app        = express(); 				// define our app using express
@@ -8,10 +11,11 @@ var bodyParser = require('body-parser'); 	// get body-parser
 var morgan     = require('morgan'); 		// used to see requests
 var jwt 	   = require('jsonwebtoken');	// used for auth tokens
 var mongoose   = require('mongoose');
-var User       = require('./app/models/user');
-var port       = process.env.PORT || 8080; // set the port for our app
 var User 	   = require('./app/models/user'); //get User schema
-var secret 	   = 'superSecretPasswordsecretThing'; //used in creation of JWT tokens
+var port       = config.port;
+var secret 	   = config.secret; //used in creation of JWT tokens
+
+
 
 
 // APP CONFIGURATION ---------------------
@@ -32,7 +36,7 @@ app.use(function(req, res, next) {
 app.use(morgan('dev'));
 
 //connect to our database
-mongoose.connect('mongodb://localhost:27017/nodeAPI');
+mongoose.connect(config.database);
 
 // ROUTES FOR OUR API
 // ======================================
