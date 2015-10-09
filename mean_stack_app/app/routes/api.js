@@ -132,7 +132,12 @@ module.exports = function(app, express) {
 			user.username = req.body.username;
 			user.password = req.body.password;
 			
+			console.log("Creating New User: " + 
+							JSON.stringify(user));
+			
 			user.save(function(err) { //use built in save to send user to MDB
+			
+				console.log("ERROR: " + err);
 				
 				if (err) { //if error, handle appropriately
 					if (err.code == 11000) { //tried to create duplicate entry
@@ -203,9 +208,14 @@ module.exports = function(app, express) {
 		
 		//PUT (update) user with id given
 		.put(function(req, res) {
+			
+			console.log("Updating User: " + req.params.user_id);
+			
 			//get the user object id 
 			User.findById(req.params.user_id, function(err, user) {
 				if (err) res.send("ERROR: " + err);
+				
+				console.log("ERROR: " + err);
 				
 				//update users info ONLY if new (if sent in request body)
 				if(req.body.name) {user.name = req.body.name;}
@@ -215,6 +225,8 @@ module.exports = function(app, express) {
 				//save the user object 
 				user.save (function(err) {
 					if (err) res.send("ERROR: " + err);
+					
+					console.log("ERROR: " + err);
 					
 					res.json({message: "User Updated"});
 				});

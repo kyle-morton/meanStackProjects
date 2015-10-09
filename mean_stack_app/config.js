@@ -5,5 +5,7 @@
 module.exports = {
 	'port' : process.env.PORT || 8080, // set the port for our app
 	'secret' : 'superSecretPasswordsecretThing', //used in creation of JWT tokens
-   'database' : 'mongodb://localhost:27017/nodeAPI'
+   // 'database' : 'mongodb://localhost:27017/nodeAPI', //local only
+   'database' : 'mongodb://kmorton:kmorton@ds051943.mongolab.com:51943/crm_database'
+   
 }

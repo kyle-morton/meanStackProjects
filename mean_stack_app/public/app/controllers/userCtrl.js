@@ -58,11 +58,16 @@ angular.module ('userCtrl', ['userService'])
 		vm.processing = true;
 		vm.message = '';
 		
+		console.log("Creating new user!");
+		
 		//use create function of User service
 		//pass the userData object that contains the 
 		//3 fields already from the form input binding
 		User.create(vm.userData)
 			.success(function(data) {
+				
+				console.log("Created New User!");
+				
 				//set proc, userData to defaults
 				vm.processing = false;
 				vm.userData = {};
