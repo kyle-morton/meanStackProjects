@@ -9,6 +9,13 @@ angular.module('app.routes', ['ngRoute'])
 		//explicitely writtin html directive
 		.when('/', { 
 			templateUrl: 'app/views/pages/home.html'
+		})
+		
+		//login page
+		.when('/login', {
+			templateUrl: 'app/views/pages/login.html',
+			controller: 'mainController',
+			controllerAs: 'login'
 		});
 	
 	//clean up url string

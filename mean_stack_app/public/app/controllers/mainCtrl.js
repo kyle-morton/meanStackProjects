@@ -5,10 +5,13 @@ angular.module ('mainCtrl', [])
 	
 	var vm = this;
 	
+	vm.processing = false;
+	
 	//check if user logged in on EACH request
 	//subscribing to rootScope objects changeStart event!
 	//when new request sent, it fires
 	$rootScope.$on('$routeChangeStart', function() {
+		
 		
 		//make sure logged in
 		vm.loggedIn = Auth.isLoggedIn();
@@ -23,6 +26,10 @@ angular.module ('mainCtrl', [])
 	
 	//handle login form submission
 	vm.doLogin = function() {
+		
+		//set to processing, clear previous error msg
+		vm.processing = true;
+		vm.error = '';
 	
 		//call Auth.login() with form data
 		Auth.login(vm.loginData.username, vm.loginData.password)

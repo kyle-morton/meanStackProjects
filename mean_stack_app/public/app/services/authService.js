@@ -16,16 +16,16 @@ angular.module('authService', [])
 	authFactory.login = function(username, password) {
 	
 		//POST creds to API auth endpoint
-		$http.post('/api/authenticate', {
+		return $http.post('/api/authenticate', {
 			username: username,
 			password: password
 		})
-		
-		.success(function(data) {
-			//success could be success/failed login, pass token obj anyway
-			AuthToken.setToken(data.token);
-			return data;
-		});
+			
+			.success(function(data) {
+				//success could be success/failed login, pass token obj anyway
+				AuthToken.setToken(data.token);
+				return data; //login function returns the data
+			});
 		
 	};
 	
@@ -56,7 +56,6 @@ angular.module('authService', [])
 			//cache = true -> checks if response cached, if has use it
 		} 
 		else { //return generic promise object stating error message
-			console.log("no token for getUser()!");
 			return $q.reject({message: 'User has no token.'});
 		}
 	};
