@@ -9,14 +9,9 @@ var express    = require('express');		// call express
 var app        = express(); 				// define our app using express
 var bodyParser = require('body-parser'); 	// get body-parser
 var morgan     = require('morgan'); 		// used to see requests
-var jwt 	   = require('jsonwebtoken');	// used for auth tokens
 var mongoose   = require('mongoose');
-var User 	   = require('./app/models/user'); //get User schema
 var port       = config.port;
-var secret 	   = config.secret; //used in creation of JWT tokens
-
-
-
+var path 	   = require('path');
 
 // APP CONFIGURATION ---------------------
 // use body parser so we can grab information from POST requests
@@ -41,14 +36,17 @@ mongoose.connect(config.database);
 // ROUTES FOR OUR API
 // ======================================
 
-// basic route for the home page
-app.get('/', function(req, res) {
-	res.send('Welcome to the home page!');
-});
-
 // REGISTER OUR ROUTES -------------------------------
 var apiRoutes = require('./app/routes/api')(app, express);
 app.use('/api', apiRoutes);
+
+
+/* Catchall comes after api routes so catchall only catches non-api routes! */
+
+//MAIN CATCHALL ROUTE -> Redirect users to index page so angular can take over!
+app.get('*', function(req, res) {
+	res.sendFile(path.join(__dirname + '/public/app/views/index.html'));
+});
 
 // START THE SERVER
 // =============================================================================
