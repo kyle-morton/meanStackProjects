@@ -52,7 +52,8 @@ angular.module('authService', [])
 		//to get user info
 		if (AuthToken.getToken()) {
 			console.log("token exists!");
-			return $http.get('/api/me', {cache: true});
+			// return $http.get('/api/me', {cache: true});
+			return $http.get('/api/me');
 			//cache = true -> checks if response cached, if has use it
 		} 
 		else { //return generic promise object stating error message
