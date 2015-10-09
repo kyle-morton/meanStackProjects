@@ -1,5 +1,5 @@
 //3 factories into 1 angular service
-angular.modle('authService', []) 
+angular.module('authService', []) 
 
 
 
@@ -51,9 +51,12 @@ angular.modle('authService', [])
 		//if logged in, send api request with current token
 		//to get user info
 		if (AuthToken.getToken()) {
-			return $http.get('/api/me');
+			console.log("token exists!");
+			return $http.get('/api/me', {cache: true});
+			//cache = true -> checks if response cached, if has use it
 		} 
 		else { //return generic promise object stating error message
+			console.log("no token for getUser()!");
 			return $q.reject({message: 'User has no token.'});
 		}
 	};
