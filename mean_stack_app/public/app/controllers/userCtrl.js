@@ -74,6 +74,37 @@ angular.module ('userCtrl', ['userService'])
 		
 	};
 	
+})
+
+
+//$routeParams used to get id from the URL
+.controller('userEditController', function($routeParams, User) {
+	
+	var vm = this;
+	
+	vm.type = "edit";
+	
+	//initialize form by getting user info for user with id passed in URL
+	User.get($routeParams.user_id)
+		.success(function(data){
+			vm.userData = data; //initialize form with user data
+		});
+		
+	vm.saveUser = function() {
+		vm.processing = true;
+		vm.message = '';
+		
+		//call User factory to update user in backend
+		User.update($routeParams.user_id, vm.userData)
+			.success(function(data) {
+				vm.processing = false;
+				vm.userData = {};
+				vm.message = data.message;
+			});
+		
+			
+	};
+	
 });
 
 

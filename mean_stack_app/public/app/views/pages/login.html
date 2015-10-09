@@ -22,9 +22,12 @@
 				<input type="password" class="form-control" ng-model="login.loginData.password">
 			</div>
 
-			<div class="alert alert-danger" ng-if="login.error">
-				{{ login.error }}
-			</div>
+
+		<div class="row show-hide-message" ng-show="login.error">
+				<div class="alert alert-danger" >
+					{{ login.error }}
+				</div>
+		</div>
 
 			<button type="submit" class="btn btn-block btn-primary">
 				<span ng-if="!login.processing">Login</span>
