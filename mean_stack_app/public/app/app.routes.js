@@ -23,7 +23,15 @@ angular.module('app.routes', ['ngRoute'])
 			templateUrl: 'app/views/pages/users/all.html',
 			controller: 'userController',
 			controllerAs: 'user'
+		})
+		
+		//create users page
+		.when('/users/create',{
+			templateUrl: 'app/views/pages/users/single.html',
+			controller: 'userCreateController',
+			controllerAs: 'user'
 		});
+		
 	
 	//clean up url string
 	$locationProvider.html5Mode(true);
