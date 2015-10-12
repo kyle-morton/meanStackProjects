@@ -1,0 +1,27 @@
+{
+  "name": "mean_bower_gulp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/kylemorton5770/meanStackProjects",
+  "authors": [
+    "kylemorton5770 <michael.morton@smail.astate.edu>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "angular": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-animate": "~1.4.7"
+  }
+}
